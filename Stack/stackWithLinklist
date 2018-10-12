@@ -1,0 +1,67 @@
+function stackImpleUsingLinklist(){
+ function Node(element){
+  		this.element=element;
+      this.next=null;
+  }
+  
+  	this.head=null;
+    
+   	this.length = 0;
+    
+    this.push=function (item){
+    	if(!this.head){
+      var node= new Node(item);
+      this.head=node;
+      }
+      else{
+      	var curr=this.head;
+        while(curr.next!=null){
+        	curr=curr.next;
+        }
+        var node= new Node(item);
+        curr.next=node
+      }
+      this.length++
+    }
+    
+    this.pop=function(){
+    	if(!this.head){
+      	console.log('Undeflow exception');
+      }
+      else{
+      var node=this.head;
+      this.head=this.head.next;
+      }
+      this.length--;
+    }
+    
+    this.traverse=function(){
+  	if(!this.isEmpty()){
+    	 var currentNode=this.head;
+     	var prevNode=null;
+    	while(currentNode!=null){
+      	prevNode=currentNode;
+        console.log(prevNode.element);
+      	currentNode=currentNode.next;
+      }
+    }
+  }
+  
+  	this.isEmpty = function() {
+    	return this.length === 0;
+  	};
+}
+
+var stack=new stackImpleUsingLinklist();
+
+stack.push(100);
+stack.push(200);
+stack.push(300);
+stack.push(400);
+
+//stack.traverse();
+
+stack.pop();
+stack.pop();
+
+stack.traverse();
