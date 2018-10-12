@@ -1,89 +1,180 @@
-
-
- class SingleNode {
-    constructor(data) {
-        this.data = data;
-        this.next = null;
+function LinkList(){
+   this.head=null;
+   this.length = 0;
+  function Node(element){
+  		this.element=element;
+      this.next=null;
+  }
+  
+  this.getLength=function(){
+  	return this.length;
+  }
+  
+  this.add=function(element){
+  	var newNode=new Node(element);
+    if(!this.head){
+    		this.head=newNode;
     }
-}
-
-class SinglyList {
-    constructor() {
-        this.length = 0;
-        this.head = null;
+    else{
+    var currentNode=this.head;
+    	while(currentNode.next!=null){
+      	currentNode=currentNode.next;
+      }
+      currentNode.next=newNode;
     }
-    add(value) {
-        var node = new SingleNode(value),
-            currentNode = this.head;
-        // 1st use-case: an empty list 
-        if (!currentNode) {
-            this.head = node;
-            this.length++;
-            return node;
+    this.length++;
+  }
+  
+  this.traverse=function(){
+  	if(!this.isEmpty()){
+    	 var currentNode=this.head;
+     	var prevNode=null;
+    	while(currentNode!=null){
+      	prevNode=currentNode;
+        console.log(prevNode.element);
+      	currentNode=currentNode.next;
+      }
+    }
+  }
+  
+  this.delete=function(element){
+  	var current=this.head;
+    var prev=null;
+    if(current.element==element)
+    	this.head=current.next;
+      else{
+      	while(current.element!=element){
+        	prev=current;
+          current=current.next;
         }
-        // 2nd use-case: a non-empty list
-        while (currentNode.next) {
+        prev.next=current.next;
+      }
+      this.length--;
+  }
+  
+  this.isEmpty = function() {
+    return this.length === 0;
+  };
+  
+  this.indexOf = function(element) {
+    var currentNode = this.head;
+    var index = -1;
+
+    while(currentNode){
+        index++;
+        if(currentNode.element === element){
+            return index;
+        }
+        currentNode = currentNode.next;
+    }
+
+    return -1;
+  };
+  
+  this.elementAt=function(index){
+  	var curr=this.head;
+    ind=1;
+    if(this.length >= index){
+    	 while(curr!=null && ind < index){
+    		ind++;
+    		curr=curr.next;
+    	}
+      return curr.element;
+    }
+    else{
+    return 'no such index present';
+    }
+  }
+  
+  this.addAt = function(index, element){
+    var node = new Node(element);
+
+    var currentNode = head;
+    var previousNode;
+    var currentIndex = 0;
+
+    if(index > length){
+        return false;
+    }
+
+    if(index === 0){
+        node.next = currentNode;
+        head = node;
+    } else {
+        while(currentIndex < index){
+            currentIndex++;
+            previousNode = currentNode;
             currentNode = currentNode.next;
         }
-        currentNode.next = node;
-        this._length++;
-        return node;
-    };
-
-    searchNodeAt(position) {
-        var currentNode = this.head,
-            length = this._length,
-            count = 1,
-            message = { failure: 'Failure: non-existent node in this list.' };
-        // 1st use-case: an invalid position 
-        if (length === 0 || position < 1 || position > length) {
-            throw new Error(message.failure);
-        }
-        // 2nd use-case: a valid position 
-        while (count < position) {
+        node.next = currentNode;
+        previousNode.next = node;
+    }
+    length++;
+  }
+  
+  this.removeAt = function(index) {
+    var currentNode = head;
+    var previousNode;
+    var currentIndex = 0;
+    if (index < 0 || index >= length){
+        return null
+    }
+    if(index === 0){
+        head = currentNode.next;
+    } else {
+        while(currentIndex < index) {
+            currentIndex ++;
+            previousNode = currentNode;
             currentNode = currentNode.next;
-            count++;
         }
-        return currentNode;
-    };
-
-    remove(position) {
-        var currentNode = this.head,
-            length = this._length,
-            count = 0,
-            message = { failure: 'Failure: non-existent node in this list.' },
-            beforeNodeToDelete = null,
-            nodeToDelete = null,
-            deletedNode = null;
-
-        // 1st use-case: an invalid position
-        if (position < 0 || position > length) {
-            throw new Error(message.failure);
-        }
-
-        // 2nd use-case: the first node is removed
-        if (position === 1) {
-            this.head = currentNode.next;
-            deletedNode = currentNode;
-            currentNode = null;
-            this._length--;
-
-            return deletedNode;
-        }
-
-        // 3rd use-case: any other node is removed
-        while (count < position) {
-            beforeNodeToDelete = currentNode;
-            nodeToDelete = currentNode.next;
-            count++;
-        }
-
-        beforeNodeToDelete.next = nodeToDelete.next;
-        deletedNode = nodeToDelete;
-        nodeToDelete = null;
-        this._length--;
-
-        return deletedNode;
-    };
-
+        previousNode.next = currentNode.next
+    }
+    length--;
+    return currentNode.element;
+  }
+  
+  //Bring the last node tp oint the first node
+  this.bringLastToFront=function(){
+  	if(!this.isEmpty() && this.length > 1){
+  		var current=this.head;
+    	var prev = null;
+      while(current.next!=null){
+        prev=current;
+        current=current.next;
+      }
+      prev.next=null;
+      current.next=this.head;
+      this.head=current;
+  	}
+    else{
+   		console.log('Doesnot have many nodes to do this operation.')
+    }
+  }
+  
+  this.reverse=function(){
+  	var curr=this.head;
+    var prev=null;
+    var next=null;
+    while(curr!=null){
+    	next=curr.next;
+      curr.next=prev;
+      prev = curr;
+      curr=next;
+    }
+    this.head=prev;
+  }
 }
+
+
+
+
+
+var link= new LinkList();
+link.add(1);
+link.add(2);
+link.add(3);
+link.add(4);
+
+link.traverse();
+link.reverse();
+link.traverse();
