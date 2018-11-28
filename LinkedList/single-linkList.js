@@ -1,180 +1,173 @@
-function LinkList(){
-   this.head=null;
-   this.length = 0;
-  function Node(element){
-  		this.element=element;
-      this.next=null;
-  }
-  
-  this.getLength=function(){
-  	return this.length;
-  }
-  
-  this.add=function(element){
-  	var newNode=new Node(element);
-    if(!this.head){
-    		this.head=newNode;
-    }
-    else{
-    var currentNode=this.head;
-    	while(currentNode.next!=null){
-      	currentNode=currentNode.next;
-      }
-      currentNode.next=newNode;
-    }
-    this.length++;
-  }
-  
-  this.traverse=function(){
-  	if(!this.isEmpty()){
-    	 var currentNode=this.head;
-     	var prevNode=null;
-    	while(currentNode!=null){
-      	prevNode=currentNode;
-        console.log(prevNode.element);
-      	currentNode=currentNode.next;
-      }
-    }
-  }
-  
-  this.delete=function(element){
-  	var current=this.head;
-    var prev=null;
-    if(current.element==element)
-    	this.head=current.next;
-      else{
-      	while(current.element!=element){
-        	prev=current;
-          current=current.next;
-        }
-        prev.next=current.next;
-      }
-      this.length--;
-  }
-  
-  this.isEmpty = function() {
-    return this.length === 0;
-  };
-  
-  this.indexOf = function(element) {
-    var currentNode = this.head;
-    var index = -1;
-
-    while(currentNode){
-        index++;
-        if(currentNode.element === element){
-            return index;
-        }
-        currentNode = currentNode.next;
-    }
-
-    return -1;
-  };
-  
-  this.elementAt=function(index){
-  	var curr=this.head;
-    ind=1;
-    if(this.length >= index){
-    	 while(curr!=null && ind < index){
-    		ind++;
-    		curr=curr.next;
-    	}
-      return curr.element;
-    }
-    else{
-    return 'no such index present';
-    }
-  }
-  
-  this.addAt = function(index, element){
-    var node = new Node(element);
-
-    var currentNode = head;
-    var previousNode;
-    var currentIndex = 0;
-
-    if(index > length){
-        return false;
-    }
-
-    if(index === 0){
-        node.next = currentNode;
-        head = node;
-    } else {
-        while(currentIndex < index){
-            currentIndex++;
-            previousNode = currentNode;
-            currentNode = currentNode.next;
-        }
-        node.next = currentNode;
-        previousNode.next = node;
-    }
-    length++;
-  }
-  
-  this.removeAt = function(index) {
-    var currentNode = head;
-    var previousNode;
-    var currentIndex = 0;
-    if (index < 0 || index >= length){
-        return null
-    }
-    if(index === 0){
-        head = currentNode.next;
-    } else {
-        while(currentIndex < index) {
-            currentIndex ++;
-            previousNode = currentNode;
-            currentNode = currentNode.next;
-        }
-        previousNode.next = currentNode.next
-    }
-    length--;
-    return currentNode.element;
-  }
-  
-  //Bring the last node tp oint the first node
-  this.bringLastToFront=function(){
-  	if(!this.isEmpty() && this.length > 1){
-  		var current=this.head;
-    	var prev = null;
-      while(current.next!=null){
-        prev=current;
-        current=current.next;
-      }
-      prev.next=null;
-      current.next=this.head;
-      this.head=current;
-  	}
-    else{
-   		console.log('Doesnot have many nodes to do this operation.')
-    }
-  }
-  
-  this.reverse=function(){
-  	var curr=this.head;
-    var prev=null;
-    var next=null;
-    while(curr!=null){
-    	next=curr.next;
-      curr.next=prev;
-      prev = curr;
-      curr=next;
-    }
-    this.head=prev;
+class Node{
+	constructor(value){
+  	this.value=value;
+  	this.next=null;
   }
 }
 
+class singleLinkList{
 
-
-
-
-var link= new LinkList();
-link.add(1);
-link.add(2);
-link.add(3);
-link.add(4);
-
-link.traverse();
-link.reverse();
-link.traverse();
+	constructor(data){
+  	this.head=null;
+    this.length=0;
+    this.tail=null;
+  }
+  //Adding to the end of the linklist.
+  push(data){
+  	let newNode= new Node(data); 
+  	if(!this.head){
+    	this.head=newNode;
+      this.tail=this.head;
+    }
+    else{
+      this.tail.next=newNode;
+      this.tail=newNode;
+    }
+    this.length++;
+    return this;
+  } 
+  
+  //Removing from the end of the linklist.
+  pop(){
+  		let curr=this.head;
+      let prev=null;
+      if(!this.head){
+      	console.error('Not a valid operation');
+        return '';
+      }
+      
+      while(curr.next){
+      	prev=curr;
+      	curr=curr.next;
+      }
+      if(this.head==this.tail){
+      	this.tail=null;
+        this.head=null;
+      }
+      else{
+      	prev.next=null;
+      	this.tail=prev;
+      	curr=null;
+      }
+      this.length--;
+      return this.length;
+  }
+  
+  //Removing from the head end
+  shift(){
+  	if(!this.head)
+    return undefined
+    if(this.length==1){
+      	this.tail=null;
+        this.head=null;
+      }
+      else{
+      	let curr=this.head;
+      	curr=curr.next;
+      	this.head=curr;
+      }
+      this.length--;
+      return this;
+  }
+  
+  //Adding from the head end
+  unshift(val){
+  	let newnode= new Node(val);
+  	if(!this.head){
+    	this.head=newnode;
+    	this.tail=this.head;
+    }
+    newnode.next=this.head;
+    this.head=newnode
+    this.length++;
+    return this;
+  }
+ 
+ 	//Retriving a node by its position in the linklist
+  get(index){
+  	if(!this.head || this.length < index || !index)
+    	return 'Not a valid operation';
+      let counter=0;
+      let curr=this.head;
+     while(curr.next && (counter < index)){
+      	curr=curr.next;
+        counter++;
+     }
+     return curr;
+  }
+  
+  //Setting the value of a node at a specific position
+  set(index,value){
+  	if(!this.head || this.length < index || !index)
+    	return 'Not a valid operation';
+      let counter=0;
+      let curr=this.head;
+     while(curr.next && (counter < index)){
+      	curr=curr.next;
+        counter++;
+     }
+     curr.value=value;
+     return curr;
+  }
+  
+  //inserting new node in a specific position
+  insert(index,value){
+  	if((index < 0) || (index >this.length))
+    	return false;
+    if(index==0)
+    	return this.unshift(value);
+     if(index==this.length)
+     return this.push(value);
+    	let counter=1;
+      let curr=this.head;
+      let prev=null;
+      while(curr.next && counter < index){
+      	prev=curr;
+        curr=curr.next;
+        counter++;
+      }
+      let newNode= new Node(value);
+      prev.next=newNode;
+      newNode.next=curr;
+      this.length++;
+      return this;
+  }
+  
+  remove(index){
+  if((index < 0) || (index >this.length))
+    	return false;
+  if(index==0)
+    	return this.shift();
+  if(index==this.length)
+     return this.pop();
+    let counter=1;
+    let curr=this.head;
+    let prev=null;
+  while(curr.next && counter < index){
+      	prev=curr;
+        curr=curr.next;
+        counter++;
+      }
+      prev.next=curr.next;
+      this.length--;
+      return this;
+  }
+  
+  reverse(){
+   let node=this.head;
+     this.head=this.tail;
+     this.tail=node;
+     let prev=null;
+     let curr=this.tail;
+     let currNext=this.tail.next;
+     while(curr.next){
+     	curr.next=prev;
+      prev=curr;
+      curr=currNext;
+      currNext=currNext.next;
+     }
+     curr.next=prev;
+     return this;
+  }
+  
+}
