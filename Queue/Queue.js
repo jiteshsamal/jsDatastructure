@@ -1,5 +1,4 @@
 class Queue {
-    data = [];
     Constructor() {
         this.data = [];
     }
